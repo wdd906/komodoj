@@ -195,7 +195,7 @@ public class Block extends Message {
      * @param transactions List of transactions including the coinbase.
      */
     public Block(NetworkParameters params, long version, Sha256Hash prevBlockHash, Sha256Hash merkleRoot, long time,
-                 long difficultyTarget, long nonce, List<Transaction> transactions) {
+                 long difficultyTarget, BigInteger nonce, List<Transaction> transactions) {
         super(params);
         this.version = version;
         this.prevBlockHash = prevBlockHash;
@@ -842,7 +842,7 @@ public class Block extends Message {
     }
 
     /** Sets the nonce and clears any cached data. */
-    public void setNonce(long nonce) {
+    public void setNonce(BigInteger nonce) {
         unCacheHeader();
         this.nonce = nonce;
         this.hash = null;
