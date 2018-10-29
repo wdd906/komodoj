@@ -1259,7 +1259,7 @@ public class Transaction extends ChildMessage {
           long recentTimestamp = (System.currentTimeMillis() / 1000L) - 777;
           this.lockTime = recentTimestamp;
         }else{
-          this.lockTime = lockTime
+          this.lockTime = lockTime;
         }
     }
 
