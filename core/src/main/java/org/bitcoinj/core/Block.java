@@ -260,7 +260,7 @@ public class Block extends Message {
         merkleRoot = readHash();
         time = readUint32();
         difficultyTarget = readUint32();
-        nonce = readUint32();
+        nonce = readUint64();
         hash = Sha256Hash.wrapReversed(Sha256Hash.hashTwice(payload, offset, cursor - offset));
         headerBytesValid = serializer.isParseRetainMode();
 
@@ -289,7 +289,7 @@ public class Block extends Message {
         stream.write(getMerkleRoot().getReversedBytes());
         Utils.uint32ToByteStreamLE(time, stream);
         Utils.uint32ToByteStreamLE(difficultyTarget, stream);
-        Utils.uint32ToByteStreamLE(nonce, stream);
+        Utils.uint64ToByteStreamLE(nonce, stream);
     }
 
     private void writeTransactions(OutputStream stream) throws IOException {
