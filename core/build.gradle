@@ -1,15 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'com.google.protobuf'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 version = '0.15-SNAPSHOT'
 archivesBaseName = 'bitcoinj-core'
 
 dependencies {
-    compile 'org.bouncycastle:bcprov-jdk15on:1.58'
+    implementation 'org.bouncycastle:bcprov-jdk15on:1.58'
     implementation 'com.lambdaworks:scrypt:1.4.0'
     implementation 'com.google.guava:guava:24.0-android'
-    compile 'com.google.protobuf:protobuf-java:3.5.1'
+    implementation 'com.google.protobuf:protobuf-java:3.21.12'
     implementation 'com.squareup.okhttp3:okhttp:3.9.1'
     implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'net.jcip:jcip-annotations:1.0'
@@ -22,7 +22,7 @@ dependencies {
     testImplementation 'org.fusesource.leveldbjni:leveldbjni-all:1.8'
 }
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 protobuf {
     generatedFilesBaseDir = new File(projectDir, '/src') // workaround for '$projectDir/src'
@@ -31,6 +31,23 @@ protobuf {
 test {
     exclude 'org/bitcoinj/net/NetworkAbstractionTests*'
 }
+
+//task javadocJar(type: Jar, dependsOn: javadoc) {
+//    classifier = 'javadoc'
+//    from javadoc.destinationDir
+//}
+//
+//task sourcesJar(type: Jar, dependsOn: classes) {
+//    classifier = 'sources'
+//    from sourceSets.main.allSource
+//}
+//
+//artifacts {
+//    archives sourcesJar
+//    archives javadocJar
+//}
+
+
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
@@ -45,4 +62,19 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifactId = 'bitcoinj-core'
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                description = 'A Java Bitcoin library'
+            }
+        }
+    }
 }
